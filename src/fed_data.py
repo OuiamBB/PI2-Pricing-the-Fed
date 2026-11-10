@@ -15,10 +15,11 @@ FRED_CSV_BASE_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id="
 def fetch_series(series_id: str) -> pd.Series:
     """Fetch a single FRED series as a pandas Series indexed by Datetime."""
     url = f"{FRED_CSV_BASE_URL}{series_id}"
-    df = pd.read_csv(url, parse_dates=['DATE'], index_col='DATE')
-    # Replace non-numeric entries (such as '.') with NaN and forward fill
-    df[series_id] = pd.to_numeric(df[series_id], errors='coerce')
-    return df[series_id]
+    df = pd.read_csv(url, parse_dates=[0], index_col=0)
+    # The value column is named after the series_id
+    col_name = df.columns[0]
+    df[col_name] = pd.to_numeric(df[col_name], errors='coerce')
+    return df[col_name]
 
 def fetch_fed_corridor(start_date: str = "2015-01-01") -> pd.DataFrame:
     """
@@ -34,6 +35,12 @@ def fetch_fed_corridor(start_date: str = "2015-01-01") -> pd.DataFrame:
         "target_lower": lower,
         "effr": effr
     }).dropna(how='all')
+
+    # Sort index and forward fill target bounds (since they are updated only on change days)
+    df = df.sort_index()
+    df["target_upper"] = df["target_upper"].ffill()
+    df["target_lower"] = df["target_lower"].ffill()
+    df["effr"] = df["effr"].ffill()
 
     # Filter by start_date
     df = df.loc[start_date:].copy()
@@ -51,6 +58,6 @@ if __name__ == "__main__":
         print(data.tail(10))
         mean_spread = data["effr_midpoint_spread_bp"].mean()
         std_spread = data["effr_midpoint_spread_bp"].std()
-        print(f"\nSpread EFFR - Midpoint since 2024: mean = {mean_spread:.2f} bp, std = {std_spread:.2f} bp")
+        print(f"\nSpread EFFR - Midpoint: mean = {mean_spread:.2f} bp, std = {std_spread:.2f} bp")
     except Exception as e:
         print(f"Error fetching data: {e}")
