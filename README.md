@@ -6,7 +6,7 @@
 
 ---
 
-## 👥 Équipe Projet
+## Équipe Projet
 
 | Membre | Rôle | Mission Technique Principale |
 | :--- | :--- | :--- |
@@ -18,7 +18,7 @@
 
 ---
 
-## 📂 Architecture du Projet
+## Architecture du Projet
 
 ```text
 PI2-Pricing-the-Fed/
@@ -42,7 +42,7 @@ PI2-Pricing-the-Fed/
 
 ---
 
-## 🚀 Prise en main rapide
+## Prise en main rapide
 
 ### 1. Cloner le projet
 ```bash
@@ -63,7 +63,7 @@ Chaque membre travaille directement dans son notebook assigné dans le dossier `
 
 ---
 
-## 📏 Règles communes pour les données et le code
+## Règles communes pour les données et le code
 - **Dates** : Format ISO `YYYY-MM-DD`.
 - **Niveaux de taux** : Pourcentages (ex. `4.25` pour `4.25%`).
 - **Variations de taux** : Points de base (ex. `25` pour `25 bp`).
