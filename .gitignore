@@ -25,6 +25,10 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Large local files (optional data dumps, temporary test outputs)
+# Large local files, logs & temporary outputs
 *.log
 *.tmp
+
+# Excel tracking and local data files (keep in local only)
+*.xlsx
+*.xls
