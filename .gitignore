@@ -32,3 +32,6 @@ Thumbs.db
 # Excel tracking and local data files (keep in local only)
 *.xlsx
 *.xls
+
+scratch/
+*.pyc
