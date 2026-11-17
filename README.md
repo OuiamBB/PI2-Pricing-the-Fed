@@ -1,113 +1,126 @@
 # Pricing the Fed: Extracting Monetary Policy Expectations from Market Data
 
-**ESILV — Majeure Ingénierie Financière (IF-A5) — Projet d'Innovation Industrielle (PI²)**  
-**Projet :** P153_T2  
-**Tuteur Référent :** M. Martino Grasselli (DVHE)  
+**ESILV — Master of Science in Financial Engineering (IF-A5) — Industrial Innovation Project (PI²)**  
+**Project Reference:** P153_T2  
+**Academic Supervisor:** Mr. Martino Grasselli (DVHE)  
 
 ---
 
-## 👥 Équipe Projet
+## 👥 Project Team
 
-| Membre | Rôle | Mission Technique Principale |
+| Team Member | Role | Primary Technical Mission |
 | :--- | :--- | :--- |
-| **Ouiam BOUSSAID BENCHAARA** | **Team Referent** | **Mission 2 :** Analyse Bloomberg WIRP, corridor Fed et comparaison méthodologique |
-| **Erian STANLEY YOGARAJ** | Membre | **Mission 1 :** Reproduction de CME FedWatch (formules, probabilités 2 états et arbre) |
-| **Justine RENAUD** | Membre | **Mission 3 :** Reconstruction historique des anticipations à $t-30, t-7, t-1$ jours |
-| **Assunta DAMIANO** | Membre | **Mission 4 :** SOFR / Eurodollar et révision de la courbe lors des annonces FOMC |
-| **Yasmine PERALDI** | Membre | **Mission 5 :** Surprises macroéconomiques (CPI, NFP) et régressions d'event study |
+| **Ouiam BOUSSAID BENCHAARA** | **Team Referent** | **Mission 2:** Bloomberg WIRP analysis, Fed policy corridor, and methodological tool comparison |
+| **Erian STANLEY YOGARAJ** | Member | **Mission 1:** CME FedWatch probability model replication (binary, aggregated, and probability tree) |
+| **Justine RENAUD** | Member | **Mission 3:** Historical reconstruction of market expectations at $t-30, t-7, t-1$ days prior to past FOMC meetings |
+| **Assunta DAMIANO** | Member | **Mission 4:** SOFR / Eurodollar term-structure repricing around FOMC announcements (Acosta et al., 2024) |
+| **Yasmine PERALDI** | Member | **Mission 5:** Macroeconomic surprises (CPI, NFP, Unemployment) and 2-Year Treasury yield event study (Healy & Jia, 2024) |
 
 ---
 
-## 📂 Architecture du Projet
+## 📂 Repository Architecture
 
 ```text
 PI2-Pricing-the-Fed/
-├── data/                                      # Datasets nettoyés et prêts à l'emploi (sur GitHub)
-│   ├── fed_funds_futures_history.csv          # Historique COMPLET Fed Funds (181 067 lignes, 228 contrats, 2010-2028)
-│   ├── sofr_futures_history.csv               # Historique COMPLET SOFR 3 mois (50 509 lignes, 43 contrats, 2018-2028)
-│   ├── eurodollar_futures_history.csv         # Historique COMPLET Eurodollar (138 064 lignes, 54 contrats, 2010-2023)
-│   ├── wirp_historical_snapshots.csv          # Snapshots WIRP historiques sur 6 cycles Fed (2015 à 2026)
-│   ├── wirp_snapshots_2026.csv                # Snapshots WIRP actuels des 18 prochaines réunions FOMC
-│   ├── macro_surprises_clean.csv              # Historique COMPLET des surprises macro (3 241 dates, 1990-2026)
-│   ├── treasury_2y_yield.csv                  # Historique COMPLET Taux 2 ans US (9 602 jours, 1990-2026)
-│   ├── reference_rates_bloomberg.csv          # Taux de référence quotidiens Bloomberg (EFFR & SOFR, 1990-2026)
-│   ├── fed_rates.csv                          # Historique corridor Fed & EFFR (FRED 2015-2026)
-│   ├── fomc_calendar.csv                      # Calendrier officiel des réunions FOMC (2024-2026)
-│   └── fomc_events_history_1990_2026.csv      # Historique des annonces FOMC depuis 1990
+├── data/                                      # Cleaned, standardized historical datasets (committed on GitHub)
+│   ├── fed_funds_futures_history.csv          # COMPLETE Fed Funds history (243,913 rows, 468 contracts, 1990-2028)
+│   ├── eurodollar_futures_history.csv         # COMPLETE Eurodollar history (269,536 rows, 134 contracts, 1990-2023)
+│   ├── sofr_futures_history.csv               # COMPLETE 3-Month SOFR history (50,509 rows, 43 contracts, 2018-2028)
+│   ├── wirp_historical_snapshots.csv          # Historical Bloomberg WIRP snapshots across 6 Fed cycles (2015 to 2026)
+│   ├── wirp_snapshots_2026.csv                # Current Bloomberg WIRP snapshots for the upcoming 18 FOMC meetings
+│   ├── macro_surprises_clean.csv              # Full macroeconomic surprises panel (3,241 releases, 1990-2026)
+│   ├── treasury_2y_yield.csv                  # Daily constant-maturity 2-Year US Treasury yield (9,602 days, 1990-2026)
+│   ├── reference_rates_bloomberg.csv          # Daily Bloomberg reference rates: EFFR and SOFR (9,364 days, 1990-2026)
+│   ├── fed_rates.csv                          # FRED policy corridor bounds (Upper, Lower, Midpoint) and EFFR (2015-2026)
+│   ├── fomc_calendar.csv                      # Scheduled FOMC meeting dates (2024-2026) with SEP / dot plot flags
+│   ├── fomc_events_history_1990_2026.csv      # Complete log of historical FOMC announcement dates & timestamps
+│   └── README.md                              # Detailed dataset documentation & cleaning specifications
 ├── notebooks/
-│   ├── 01_fedwatch_model_erian.ipynb          # Notebook Erian (CME FedWatch)
-│   ├── 02_wirp_comparison_ouiam.ipynb         # Notebook Ouiam (WIRP vs FedWatch)
-│   ├── 03_historical_reconstruction_justine.ipynb # Notebook Justine (Historique)
-│   ├── 04_sofr_fomc_analysis_assunta.ipynb             # Notebook Assunta (SOFR)
-│   └── 05_macro_repricing_yasmine.ipynb       # Notebook Yasmine (Surprises Macro)
+│   ├── 01_fedwatch_model_erian.ipynb          # Mission 1 notebook: CME FedWatch replication (Erian)
+│   ├── 02_wirp_comparison_ouiam.ipynb         # Mission 2 notebook: Bloomberg WIRP vs FedWatch (Ouiam)
+│   ├── 03_historical_reconstruction_justine.ipynb # Mission 3 notebook: Historical expectations reconstruction (Justine)
+│   ├── 04_sofr_fomc_analysis_assunta.ipynb    # Mission 4 notebook: SOFR term structure & FOMC jumps (Assunta)
+│   └── 05_macro_repricing_yasmine.ipynb       # Mission 5 notebook: Macro surprises & Healy-Jia regressions (Yasmine)
 ├── src/
 │   ├── __init__.py
-│   ├── fed_data.py                            # Téléchargement FRED (EFFR, corridor)
-│   ├── futures_math.py                        # Décomposition futures avant/après FOMC
-│   └── probabilities.py                       # Calcul des probabilités de décision
-├── requirements.txt                           # Dépendances Python du projet
+│   ├── fed_data.py                            # Automated FRED data downloader & corridor analyzer
+│   ├── futures_math.py                        # Pre-/post-meeting decomposition & Kuttner surprise formulas
+│   └── probabilities.py                       # Analytical 2-state, 3-state, and tree probability models
+├── requirements.txt                           # Project Python dependencies
 └── README.md
 ```
 
 ---
 
-## 📊 Dictionnaire des Données Historiques Complètes
+## 📊 Complete Historical Data Dictionary
 
-Afin de répondre rigoureusement aux exigences de M. Grasselli (reproduction des anticipations de marché sur les cycles passés, reconstruction à $t-30, t-7, t-1$, et analyses d'event study), **l'intégralité des séries temporelles historiques extraites du terminal Bloomberg a été compilée en fichiers CSV complets et légers** :
+To ensure seamless reproduction of historical policy expectations, event-study regressions, and term-structure analysis without memory overhead, **all raw Bloomberg extractions have been converted into clean, optimized CSV files**:
 
-### 1. `fed_funds_futures_history.csv` (181 067 lignes — 228 contrats)
-* **Période :** **2010 à 2028**.
-* **Contenu :** L'ensemble des 228 contrats mensuels 30-Day Federal Funds futures (`FFF10` à `FFZ28`).
-* **Colonnes :** `date`, `px_last`, `px_settle`, `px_volume`, `open_interest`, `contract`.
-* **Usage :** Indispensable pour Justine (Mission 3) pour reconstruire les anticipations de marché à $t-30, t-7, t-1$ jours de n'importe quelle réunion FOMC passée (2015, 2018, 2020, 2022, 2024).
-
-### 2. `sofr_futures_history.csv` (50 509 lignes — 43 contrats)
-* **Période :** **2018 à 2028** (Depuis le lancement de SOFR sur le CME).
-* **Contenu :** Tous les contrats trimestriels SOFR 3 mois (`SFRM18` à `SFRZ28`).
-* **Colonnes :** `date`, `px_last`, `px_settle`, `px_volume`, `open_interest`, `contract`.
-* **Usage :** Indispensable pour Assunta (Mission 4) pour analyser la dynamique de terme et le saut de politique monétaire selon Acosta, Brennan & Jacobson (2024).
-
-### 3. `eurodollar_futures_history.csv` (138 064 lignes — 54 contrats)
-* **Période :** **2010 à 2023** (Jusqu'à la fin du LIBOR).
-* **Contenu :** Tous les contrats trimestriels Eurodollar futures de 2010 à 2023 (`EDH10` à `EDM23`).
-* **Colonnes :** `date`, `px_last`, `px_settle`, `px_volume`, `open_interest`, `contract`.
-* **Usage :** Permet la continuité historique pré-2022 avant la bascule vers SOFR (Acosta et al.).
-
-### 4. `wirp_historical_snapshots.csv` (78 réunions sur 6 cycles Fed)
-* **Période :** **2015 à 2026**.
-* **Contenu :** Snapshots historiques réels de Bloomberg `WIRP <GO>` capturés aux dates charnières :
-  - `2015-01-02` : Premier cycle de normalisation post-crise.
-  - `2018-01-02` : Cycle de resserrement (taux à 1.50%).
-  - `2020-01-02` : Anticipations pré-COVID.
-  - `2021-12-31` : Veille du grand choc inflationniste (taux à 0.25%).
-  - `2024-12-31` : Cycle de baisse des taux (taux à 4.50%).
-  - `2026-11-17` : Cycle actuel sous Kevin Warsh (taux à 4.00%).
-* **Colonnes :** `asof_pricing_date`, `fomc_meeting_date`, `target_rate_pct`, `effective_rate_pct`, `implied_rate_pct`, `expected_change_bp`, `priced_moves`, `prob_move_pct`.
-* **Usage :** Ouiam (Mission 2) & Erian (Mission 1) pour comparer l'évolution des probabilités WIRP vs FedWatch dans le passé.
-
-### 5. `macro_surprises_clean.csv` (3 241 dates — 1990 à 2026)
-* **Période :** **1990 à 2026** (36 ans d'historique macro).
-* **Contenu :** Toutes les publications officielles pour CPI, Core CPI, Non-Farm Payrolls, et Taux de chômage, avec les valeurs réelles (`actual`), le consensus médian Bloomberg (`survey_median`) et la surprise brute calculée (`surprise`).
-* **Usage :** Yasmine (Mission 5) pour les régressions Healy & Jia (2024).
-
-### 6. `treasury_2y_yield.csv` (9 602 jours — 1990 à 2026)
-* **Période :** **1990 à 2026**.
-* **Contenu :** Taux actuariel quotidien du bon du Trésor US à 2 ans (`yield_2y_pct`).
-* **Usage :** Yasmine (Mission 5) comme variable dépendante de réaction de la politique monétaire.
+| Dataset Name | Period Covered | Total Rows | Underlying Contracts / Scope | Primary Users |
+| :--- | :---: | :---: | :--- | :--- |
+| **`fed_funds_futures_history.csv`** | **1990 – 2028** | **243,913** | **468 monthly contracts** (`FFF90` to `FFZ28`). Daily settlement prices, closing prices, volume, and open interest. | **Justine (M3), Erian (M1)** |
+| **`eurodollar_futures_history.csv`** | **1990 – 2023** | **269,536** | **134 quarterly contracts** (`EDH90` to `EDM23`) covering the pre-SOFR sample up to LIBOR cessation. | **Assunta (M4)** |
+| **`sofr_futures_history.csv`** | **2018 – 2028** | **50,509** | **43 quarterly contracts** (`SFRM18` to `SFRZ28`) since inception on the CME. | **Assunta (M4)** |
+| **`wirp_historical_snapshots.csv`** | **2015 – 2026** | **78 meetings** | Snapshots of Bloomberg `WIRP <GO>` across 6 major Fed regime pivots (2015 liftoff, 2018 tightening, 2020 COVID, 2021 pre-hike, 2024 cuts, 2026 current regime). | **Ouiam (M2), Erian (M1)** |
+| **`wirp_snapshots_2026.csv`** | **2026 – 2028** | **18 meetings** | Current Bloomberg WIRP snapshot for upcoming FOMC meetings comparing **Futures Model** (`US_FUT`) vs **OIS Model** (`US_OIS`). | **Ouiam (M2), Erian (M1)** |
+| **`macro_surprises_clean.csv`** | **1990 – 2026** | **3,241 releases** | Complete macroeconomic consensus panel for CPI, Core CPI, Non-Farm Payrolls, and Unemployment rate with `actual`, `survey_median`, and calculated `surprise` ($A - E$). | **Yasmine (M5)** |
+| **`treasury_2y_yield.csv`** | **1990 – 2026** | **9,602 days** | Daily constant-maturity 2-year US Treasury yield (`yield_2y_pct`). | **Yasmine (M5)** |
+| **`reference_rates_bloomberg.csv`** | **1990 – 2026** | **9,364 days** | Daily official Bloomberg fixings for Effective Federal Funds Rate (`effr`) and Secured Overnight Financing Rate (`sofr`). | **ALL (Team)** |
+| **`fed_rates.csv`** | **2015 – 2026** | **4,331 days** | FRED official policy corridor: Upper Limit, Lower Limit, Target Midpoint, and daily EFFR-Midpoint spread. | **ALL (Team)** |
+| **`fomc_events_history_1990_2026.csv`** | **1990 – 2026** | **388 events** | Historical catalog of all scheduled and unscheduled FOMC rate announcements and timestamps. | **Assunta (M4), Yasmine (M5)** |
+| **`fomc_calendar.csv`** | **2024 – 2026** | **24 meetings** | Official FOMC meeting schedule with flags for Summary of Economic Projections / dot plot releases. | **ALL (Team)** |
 
 ---
 
-## 🚀 Prise en main rapide
+## 🧹 Data Cleaning Pipeline & Quality Assurance
 
+1. **Header & Metadata Stripping:** Bloomberg terminal exports embed 5 to 6 metadata rows (*Security, Start Date, End Date, Period, Spill Area*). All files have been programmatically parsed to expose clean, typed headers at line 1.
+2. **Zero Mixing of Contracts:** Every single contract sheet extracted from Bloomberg (`FFF90`, `EDH94`, `SFRZ26`, etc.) is strictly tagged with its native contract identifier in the `contract` column. Zero contracts were merged or overwritten.
+3. **Date Harmonization:** All observation dates are strictly parsed into ISO 8601 format (`YYYY-MM-DD`).
+4. **Unit Standards:**
+   - **Rate Levels:** Recorded in percentage points (e.g., `4.00` means 4.00%).
+   - **Rate Changes & Spreads:** Recorded in basis points (e.g., `25.0` means 25 bp).
+   - **Probabilities:** Recorded as decimal values between 0.0 and 1.0 (e.g., `0.65` means 65%).
+5. **Fast & Reliable Loading:** Clean CSV files load in under 0.05 seconds with `pandas.read_csv()`, avoiding `openpyxl` dependencies and memory spikes in Jupyter.
+
+---
+
+## 🚀 Quickstart Guide
+
+### 1. Clone or Update the Repository
+```bash
+git clone https://github.com/OuiamBB/PI2-Pricing-the-Fed.git
+cd PI2-Pricing-the-Fed
+# If already cloned, pull latest data:
+git pull origin main
+```
+
+### 2. Install Required Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Loading Clean Data in Python
 ```python
 import pandas as pd
 
-# 1. Historique complet des Fed Funds (2010-2028) :
-df_ff = pd.read_csv('data/fed_funds_futures_history.csv')
+# Load 38 years of Fed Funds futures history (1990-2028):
+df_ff = pd.read_csv('../data/fed_funds_futures_history.csv')
 
-# 2. Snapshots WIRP historiques sur tous les cycles :
-df_wirp_hist = pd.read_csv('data/wirp_historical_snapshots.csv')
+# Load historical WIRP snapshots:
+df_wirp_hist = pd.read_csv('../data/wirp_historical_snapshots.csv')
 
-# 3. Surprises macroéconomiques (1990-2026) :
-df_macro = pd.read_csv('data/macro_surprises_clean.csv')
+# Load 36 years of macroeconomic releases & surprises:
+df_macro = pd.read_csv('../data/macro_surprises_clean.csv')
+
+# Load current 2026 WIRP meeting expectations:
+df_wirp_2026 = pd.read_csv('../data/wirp_snapshots_2026.csv')
 ```
+
+### 4. Running Member Notebooks
+Each team member works inside their dedicated notebook located in `notebooks/`:
+- `01_fedwatch_model_erian.ipynb` — Erian
+- `02_wirp_comparison_ouiam.ipynb` — Ouiam
+- `03_historical_reconstruction_justine.ipynb` — Justine
+- `04_sofr_fomc_analysis_assunta.ipynb` — Assunta
+- `05_macro_repricing_yasmine.ipynb` — Yasmine
