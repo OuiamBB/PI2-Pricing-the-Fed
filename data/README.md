@@ -6,7 +6,7 @@ All heavy raw Bloomberg extractions (`.xlsx`) are kept locally in raw archives t
 
 ---
 
-## 📁 Available Datasets & Data Dictionary
+## Available Datasets & Data Dictionary
 
 | File Name | Source | Description | Primary Users |
 | :--- | :--- | :--- | :--- |
@@ -21,7 +21,7 @@ All heavy raw Bloomberg extractions (`.xlsx`) are kept locally in raw archives t
 
 ---
 
-## 🧹 Data Cleaning Pipeline Applied
+## Data Cleaning Pipeline Applied
 
 1. **Header & Metadata Removal:** Bloomberg terminal exports include 5 to 6 metadata rows (`Security`, `Start Date`, `End Date`, `Period`). These were stripped to expose pure column headers at row 1.
 2. **Standard Column Naming:** All column headers follow lower-case `snake_case` conventions.
