@@ -6,7 +6,7 @@
 
 ---
 
-## 👥 Project Team
+## Project Team
 
 | Team Member | Role | Primary Technical Mission |
 | :--- | :--- | :--- |
@@ -18,7 +18,7 @@
 
 ---
 
-## 📂 Repository Architecture
+##  Repository Architecture
 
 ```text
 PI2-Pricing-the-Fed/
@@ -52,7 +52,7 @@ PI2-Pricing-the-Fed/
 
 ---
 
-## 📊 Complete Historical Data Dictionary
+## Complete Historical Data Dictionary
 
 To ensure seamless reproduction of historical policy expectations, event-study regressions, and term-structure analysis without memory overhead, **all raw Bloomberg extractions have been converted into clean, optimized CSV files**:
 
@@ -72,7 +72,7 @@ To ensure seamless reproduction of historical policy expectations, event-study r
 
 ---
 
-## 🧹 Data Cleaning Pipeline & Quality Assurance
+## Data Cleaning Pipeline & Quality Assurance
 
 1. **Header & Metadata Stripping:** Bloomberg terminal exports embed 5 to 6 metadata rows (*Security, Start Date, End Date, Period, Spill Area*). All files have been programmatically parsed to expose clean, typed headers at line 1.
 2. **Zero Mixing of Contracts:** Every single contract sheet extracted from Bloomberg (`FFF90`, `EDH94`, `SFRZ26`, etc.) is strictly tagged with its native contract identifier in the `contract` column. Zero contracts were merged or overwritten.
@@ -85,7 +85,7 @@ To ensure seamless reproduction of historical policy expectations, event-study r
 
 ---
 
-## 🚀 Quickstart Guide
+## Quickstart Guide
 
 ### 1. Clone or Update the Repository
 ```bash
