@@ -1,37 +1,37 @@
-# Data Directory — PI2 Team P153_T2
+# Data Directory — PI2 Team P153_T2 (Complete Historical Datasets)
 
-This directory contains the cleaned, standardized datasets for the project **Pricing the Fed: Extracting Monetary Policy Expectations from Market Data**.
-
-All heavy raw Bloomberg extractions (`.xlsx`) are kept locally in raw archives to ensure fast, zero-bug loading in Python notebooks.
+This directory contains the **COMPLETE historical datasets** extracted from the Bloomberg Terminal (1990–2028), cleaned, standardized, and ready to be loaded by Python notebooks with zero bugs.
 
 ---
 
-## Available Datasets & Data Dictionary
+## 📁 Available Historical Datasets
 
-| File Name | Source | Description | Primary Users |
-| :--- | :--- | :--- | :--- |
-| **`wirp_snapshots_2026.csv`** | Bloomberg `WIRP <GO>` | Snapshots of upcoming 18 FOMC meetings (implied rates, expected moves in bp, probabilities under Futures and OIS models) | **Ouiam (M2), Erian (M1)** |
-| **`fed_funds_recent_contracts.csv`** | Bloomberg `FFV26` to `FFZ27` | Daily price history (`px_last`, `px_settle`, `px_volume`, `open_interest`) across recent 30-Day Fed Funds contracts | **Erian (M1), Justine (M3)** |
-| **`reference_rates_bloomberg.csv`** | Bloomberg | Daily official fixings for Effective Federal Funds Rate (`effr`) and Secured Overnight Financing Rate (`sofr`) | **ALL (Team)** |
-| **`fed_rates.csv`** | FRED (St. Louis Fed) | Historical series for Fed target range bounds (`target_upper`, `target_lower`), `target_midpoint`, and `effr` | **ALL (Team)** |
-| **`sofr_futures_recent.csv`** | Bloomberg `SFRU26` to `SFRZ27` | Daily settlement prices for 3-Month SOFR futures (3rd to 5th contracts for Acosta et al. methodology) | **Assunta (M4)** |
-| **`macro_surprises_clean.csv`** | Bloomberg `ECO <GO>` | Economic releases for CPI, Core CPI, NFP, Unemployment: `actual`, `survey_median`, and computed `surprise` ($A - E$) | **Yasmine (M5)** |
-| **`treasury_2y_yield.csv`** | Bloomberg `USGG2YR Index` | Daily constant-maturity 2-year US Treasury yield (1990–2026) | **Yasmine (M5)** |
-| **`fomc_calendar.csv`** | Federal Reserve Board | FOMC meeting dates (2024–2026) and flags for Summary of Economic Projections / dot plot releases (`sep_dot_plot`) | **ALL (Team)** |
+| File Name | Horizon / Scope | Rows | Description | Primary Users |
+| :--- | :--- | :---: | :--- | :--- |
+| **`fed_funds_futures_history.csv`** | **2010 – 2028** | **181 067** | All 228 monthly 30-Day Fed Funds contracts (`FFF10` to `FFZ28`). Daily settlement prices, volumes, open interest. | **Justine (M3), Erian (M1)** |
+| **`sofr_futures_history.csv`** | **2018 – 2028** | **50 509** | All 43 quarterly 3-Month SOFR futures contracts (`SFRM18` to `SFRZ28`) since inception on CME. | **Assunta (M4)** |
+| **`eurodollar_futures_history.csv`** | **2010 – 2023** | **138 064** | All 54 quarterly Eurodollar futures contracts (`EDH10` to `EDM23`) up to LIBOR cessation. | **Assunta (M4)** |
+| **`wirp_historical_snapshots.csv`** | **2015 – 2026** | **78** | Real Bloomberg WIRP snapshots at key pivot dates (2015, 2018, 2020, 2021, 2024, 2026). | **Ouiam (M2), Erian (M1)** |
+| **`wirp_snapshots_2026.csv`** | **2026 – 2028** | **18** | Current Bloomberg WIRP snapshot for upcoming FOMC meetings (Futures vs OIS models). | **Ouiam (M2), Erian (M1)** |
+| **`macro_surprises_clean.csv`** | **1990 – 2026** | **3 241** | Full history of economic releases for CPI, Core CPI, NFP, Unemployment: `actual`, `survey_median`, and computed `surprise`. | **Yasmine (M5)** |
+| **`treasury_2y_yield.csv`** | **1990 – 2026** | **9 602** | Full daily constant-maturity 2-year US Treasury yield. | **Yasmine (M5)** |
+| **`reference_rates_bloomberg.csv`** | **1990 – 2026** | **9 364** | Daily official fixings for Effective Federal Funds Rate (`effr`) and Secured Overnight Financing Rate (`sofr`). | **ALL (Team)** |
+| **`fomc_events_history_1990_2026.csv`** | **1990 – 2026** | **388** | Complete list of all historical FOMC announcement events, timestamps, and metadata. | **Assunta (M4), Yasmine (M5)** |
+| **`fomc_calendar.csv`** | **2024 – 2026** | **24** | Scheduled FOMC meeting dates and SEP dot plot release flags. | **ALL (Team)** |
 
 ---
 
-## Data Cleaning Pipeline Applied
+## ⚡ Loading in Python
 
-1. **Header & Metadata Removal:** Bloomberg terminal exports include 5 to 6 metadata rows (`Security`, `Start Date`, `End Date`, `Period`). These were stripped to expose pure column headers at row 1.
-2. **Standard Column Naming:** All column headers follow lower-case `snake_case` conventions.
-3. **Date Standardization:** All dates parsed into standard ISO format (`YYYY-MM-DD`).
-4. **Unit Normalization:**
-   - Rates: Stored in percentage points (e.g. `4.25` = 4.25%).
-   - Price Changes & Moves: Stored in basis points (e.g. `25.0` = 25 bp).
-   - Probabilities: Stored as decimals between 0 and 1 (e.g. `0.60` = 60%).
-5. **No Broken Paths:** All notebooks can load files with relative paths, e.g.:
-   ```python
-   import pandas as pd
-   df = pd.read_csv('../data/wirp_snapshots_2026.csv')
-   ```
+```python
+import pandas as pd
+
+# Load 15 years of Fed Funds futures daily history:
+df_ff = pd.read_csv('../data/fed_funds_futures_history.csv')
+
+# Load historical WIRP snapshots:
+df_wirp_hist = pd.read_csv('../data/wirp_historical_snapshots.csv')
+
+# Load 36 years of macroeconomic surprises:
+df_macro = pd.read_csv('../data/macro_surprises_clean.csv')
+```
