@@ -28,7 +28,8 @@ PI2-Pricing-the-Fed/
 │   ├── sofr_futures_history.csv               # COMPLETE 3-Month SOFR history (50,509 rows, 43 contracts, 2018-2028)
 │   ├── wirp_historical_snapshots.csv          # Historical Bloomberg WIRP snapshots across 6 Fed cycles (2015 to 2026)
 │   ├── wirp_snapshots_2026.csv                # Current Bloomberg WIRP snapshots for the upcoming 18 FOMC meetings
-│   ├── macro_surprises_clean.csv              # Full macroeconomic surprises panel (3,241 releases, 1990-2026)
+│   ├── macro_surprises_clean.csv              # Raw Bloomberg macro export (columns shifted, see notebook 05)
+│   ├── macro_event_study/                     # Mission 5 outputs: corrected macro surprises, event panel, regressions
 │   ├── treasury_2y_yield.csv                  # Daily constant-maturity 2-Year US Treasury yield (9,602 days, 1990-2026)
 │   ├── reference_rates_bloomberg.csv          # Daily Bloomberg reference rates: EFFR and SOFR (9,364 days, 1990-2026)
 │   ├── fed_rates.csv                          # FRED policy corridor bounds (Upper, Lower, Midpoint) and EFFR (2015-2026)
@@ -63,7 +64,8 @@ To ensure seamless reproduction of historical policy expectations, event-study r
 | **`sofr_futures_history.csv`** | **2018 – 2028** | **50,509** | **43 quarterly contracts** (`SFRM18` to `SFRZ28`) since inception on the CME. | **Assunta (M4)** |
 | **`wirp_historical_snapshots.csv`** | **2015 – 2026** | **78 meetings** | Snapshots of Bloomberg `WIRP <GO>` across 6 major Fed regime pivots (2015 liftoff, 2018 tightening, 2020 COVID, 2021 pre-hike, 2024 cuts, 2026 current regime). | **Ouiam (M2), Erian (M1)** |
 | **`wirp_snapshots_2026.csv`** | **2026 – 2028** | **18 meetings** | Current Bloomberg WIRP snapshot for upcoming FOMC meetings comparing **Futures Model** (`US_FUT`) vs **OIS Model** (`US_OIS`). | **Ouiam (M2), Erian (M1)** |
-| **`macro_surprises_clean.csv`** | **1990 – 2026** | **3,241 releases** | Complete macroeconomic consensus panel for CPI, Core CPI, Non-Farm Payrolls, and Unemployment rate with `actual`, `survey_median`, and calculated `surprise` ($A - E$). | **Yasmine (M5)** |
+| **`macro_surprises_clean.csv`** | **1997 – 2026** | **3,241 rows** | Raw Bloomberg export for CPI, Core CPI, NFP and Unemployment. Columns are shifted (release date in `actual`, published value in `survey_median`, consensus median in `survey_high`) and `surprise` is empty. Use `macro_event_study/macro_surprises_fixed.csv` instead. | **Yasmine (M5)** |
+| **`macro_event_study/macro_surprises_fixed.csv`** | **1997 – 2026** | **1,424 releases** | Corrected macro panel, one row per release: `release_date`, `indicator`, `ref_period`, `actual`, `survey_median`, `survey_average`, `survey_high`, `surprise` ($A - E$). Built by notebook 05. | **Yasmine (M5)** |
 | **`treasury_2y_yield.csv`** | **1990 – 2026** | **9,602 days** | Daily constant-maturity 2-year US Treasury yield (`yield_2y_pct`). | **Yasmine (M5)** |
 | **`reference_rates_bloomberg.csv`** | **1990 – 2026** | **9,364 days** | Daily official Bloomberg fixings for Effective Federal Funds Rate (`effr`) and Secured Overnight Financing Rate (`sofr`). | **ALL (Team)** |
 | **`fed_rates.csv`** | **2015 – 2026** | **4,331 days** | FRED official policy corridor: Upper Limit, Lower Limit, Target Midpoint, and daily EFFR-Midpoint spread. | **ALL (Team)** |
@@ -110,8 +112,8 @@ df_ff = pd.read_csv('../data/fed_funds_futures_history.csv')
 # Load historical WIRP snapshots:
 df_wirp_hist = pd.read_csv('../data/wirp_historical_snapshots.csv')
 
-# Load 36 years of macroeconomic releases & surprises:
-df_macro = pd.read_csv('../data/macro_surprises_clean.csv')
+# Load corrected macroeconomic surprises (1997-2026):
+df_macro = pd.read_csv('../data/macro_event_study/macro_surprises_fixed.csv')
 
 # Load current 2026 WIRP meeting expectations:
 df_wirp_2026 = pd.read_csv('../data/wirp_snapshots_2026.csv')
